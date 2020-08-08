@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from django.template import loader
 from django.db import IntegrityError, transaction
 
 import functools
@@ -59,6 +60,24 @@ def insert_node(request, parent_id):
     else:
         return HttpResponse("Node with provided ID does not exist.")
 
+def get_node(request, node_id):
+    node = models.Node.objects.get(id=node_id)
+    template = loader.get_template('company_model_manager/nodes.html')
+    context = {
+        'node': node,
+    }
+    return HttpResponse(template.render(context, request))
+
+def node(request, node_id):
+    if request.method == "GET":
+        get_node(request, node_id)
+    elif request.method == "PUT":
+        new_parent_id = request.PUT.get("new_parent_id")
+        set_parent(request, node_id, new_parent_id)
+    # TODO implement DELETE
+    else:
+        return HttpResponse("Unsupported operation", status=400)
+
 def get_descendant_nodes(node_id):
     '''
     Run BFS to get all descendants.
@@ -92,11 +111,18 @@ def get_descendants(request, node_id):
         }
         descendants.append(descendant)
     
-    response_data = {
-        'descendants': descendants,
-    }
+    #response_data = {
+    #    'descendants': descendants,
+    #}
 
-    return JsonResponse(response_data)
+    #return JsonResponse(response_data)
+
+    template = loader.get_template('company_model_manager/descendants.html')
+    context = {
+        'descendants': descendants,
+        'node_id': node_id,
+    }
+    return HttpResponse(template.render(context, request))
 
 def is_node_among_descendants(top_node, node_to_find):
     if not models.Node.objects.filter(parent=top_node):
@@ -115,7 +141,7 @@ def is_node_among_descendants(top_node, node_to_find):
         return False
 
 def set_parent(request, node_id, new_parent_id):
-    # TODO cover edge cases
+    # TODO cover edge cases - when trying to set parent of root, etc.
     # TODO requests
     node = models.Node.objects.get(id=node_id)
     old_parent_id = node.parent.id
@@ -125,4 +151,5 @@ def set_parent(request, node_id, new_parent_id):
     else:
         node.parent = new_parent
         node.save()
-        return HttpResponse("Node with ID: " + str(node_id) + " parent set from " + str(old_parent_id) + " to " + str(new_parent_id))
+        response = f"Node with ID: {str(node_id)} parent set from {str(old_parent_id)} to {str(new_parent_id)}"
+        return HttpResponse(response)
