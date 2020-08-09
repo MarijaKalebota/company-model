@@ -34,3 +34,12 @@ Or with raw docker
 docker build --tag company-model-service:1.0 .
 docker run -d company-model-service:1.0
 ```
+
+## Contribute
+
+After you add or change code, run both `black` and `isort` to unify the code style;
+
+```bash
+black company_model_site/company_model_manager/
+isort -rc company_model_site/company_model_manager/
+```
