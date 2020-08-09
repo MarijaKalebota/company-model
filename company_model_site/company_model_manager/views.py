@@ -2,15 +2,31 @@ import functools
 
 from django.core import serializers
 from django.db import IntegrityError, transaction
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.template import loader
+from django.urls import reverse
 
 from . import models
 
 
 def index(request):
     return HttpResponse("Hello, world. You're at the index.")
+
+
+def nodes_api(request):
+    if request.method == "GET":
+        nodes = models.Node.objects.all()
+        return JsonResponse({"nodes": [node.to_dict() for node in nodes]},)
+    if request.method == "POST":
+        created, node = models.Node.insert(request.POST.get("parent_id"))
+        if created:
+            return HttpResponseRedirect(
+                reverse("company_model_manager:node_api", args=(node.id,))
+            )
+        else:
+            # TODO catch
+            return HttpResponse("Unsuccessful creation", status=400)
 
 
 def node_api(request, node_id):

@@ -6,10 +6,6 @@ class ViewsTests(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def test_nodes_without_specifing_id(self):
-        response = self.client.get("/company_model_manager/api/v1/nodes/")
-        assert response.status_code == 404
-
     def test_node_api_get(self):
         created, root = models.Node.insert()
         assert created is True
@@ -60,3 +56,22 @@ class ViewsTests(TestCase):
 
         descendants = response.json()["descendants"]
         assert len(descendants) == 2
+
+    def test_nodes_api_post(self):
+        response = self.client.post(f"/company_model_manager/api/v1/nodes/")
+        assert response.status_code == 302
+        assert len(models.Node.objects.all()) == 1
+
+    def test_multiple_nodes_api_post(self):
+        response = self.client.post(f"/company_model_manager/api/v1/nodes/")
+        response = self.client.post(
+            f"/company_model_manager/api/v1/nodes/", data={"parent_id": 1}
+        )
+        assert response.status_code == 302
+
+    def test_multiple_nodes_api_post_incorrect(self):
+        response = self.client.post(f"/company_model_manager/api/v1/nodes/")
+        response = self.client.post(
+            f"/company_model_manager/api/v1/nodes/", data={"parent_id": 2}
+        )
+        assert response.status_code == 400
