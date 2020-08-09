@@ -12,9 +12,6 @@ def populate_db_with_nodes():
 
 
 class NodeModelTests(TestCase):
-    def setUp(self):
-        self.client = Client()
-
     def test_get_descendant_of_root(self):
         root, node1a, node1b, node2a = populate_db_with_nodes()
 
