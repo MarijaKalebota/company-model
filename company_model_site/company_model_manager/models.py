@@ -1,13 +1,18 @@
-from django.db import models
-from django.db import IntegrityError, transaction
-
 import functools
 import json
+
+from django.db import IntegrityError, models, transaction
+
 # Create your models here.
 
+
 class Node(models.Model):
-    root = models.ForeignKey('Node', on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+')
-    parent = models.ForeignKey('Node', on_delete=models.DO_NOTHING, blank=True, null=True, related_name='+')
+    root = models.ForeignKey(
+        "Node", on_delete=models.DO_NOTHING, blank=True, null=True, related_name="+"
+    )
+    parent = models.ForeignKey(
+        "Node", on_delete=models.DO_NOTHING, blank=True, null=True, related_name="+"
+    )
     height = models.BigIntegerField()
 
     @classmethod
@@ -33,11 +38,7 @@ class Node(models.Model):
         if cls.objects.exists():
             return False, None
 
-        root = cls(
-            root = None,
-            parent = None,
-            height = 0,
-        )
+        root = cls(root=None, parent=None, height=0,)
         try:
             with transaction.atomic():
                 root.save()
@@ -62,11 +63,7 @@ class Node(models.Model):
         if parent is None:
             return False, None
 
-        node = cls(
-            root = cls.get_root(),
-            parent = parent,
-            height = parent.height + 1,
-        )
+        node = cls(root=cls.get_root(), parent=parent, height=parent.height + 1,)
         node.save()
         return True, node
 
@@ -114,11 +111,11 @@ class Node(models.Model):
         self.parent = new_parent
         self.save()
         return True
-        
+
     def get_descendants(self):
-        '''
+        """
         Run BFS to get all descendant nodes.
-        '''
+        """
         # TODO request?
         # TODO arguments into docstring
         # TODO invalid node id
@@ -131,13 +128,13 @@ class Node(models.Model):
             for child in children:
                 nodes_to_check.append(child)
                 descendants.append(child)
-        
+
         return descendants
 
     def to_dict(self):
         return {
-            'id': str(self.id),
-            'parent': str(self.parent.id) if self.parent else str(None),
-            'root': str(self.root.id),
-            'height': str(self.height),
+            "id": str(self.id),
+            "parent": str(self.parent.id) if self.parent else str(None),
+            "root": str(self.root.id),
+            "height": str(self.height),
         }

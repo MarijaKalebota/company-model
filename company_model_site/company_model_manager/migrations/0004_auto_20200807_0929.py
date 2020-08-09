@@ -6,13 +6,11 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('company_model_manager', '0003_auto_20200807_0924'),
+        ("company_model_manager", "0003_auto_20200807_0924"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='node',
-            name='height',
-            field=models.BigIntegerField(),
+            model_name="node", name="height", field=models.BigIntegerField(),
         ),
     ]

@@ -1,6 +1,6 @@
+from company_model_manager import models
 from django.test import Client, TestCase
 
-from company_model_manager import models
 
 def populate_db_with_nodes():
     _, root = models.Node.insert()
@@ -10,11 +10,11 @@ def populate_db_with_nodes():
 
     return root, node1a, node1b, node2a
 
-class NodeModelTests(TestCase):
 
+class NodeModelTests(TestCase):
     def setUp(self):
         self.client = Client()
-    
+
     def test_get_descendant_of_root(self):
         root, node1a, node1b, node2a = populate_db_with_nodes()
 
@@ -39,7 +39,7 @@ class NodeModelTests(TestCase):
 
     def test_get_descendant_nodes_one_level(self):
         root, node1a, node1b, node2a = populate_db_with_nodes()
-        
+
         assert len(node2a.get_descendants()) == 0
 
     def test_insert_root_node(self):
@@ -56,10 +56,10 @@ class NodeModelTests(TestCase):
         _, root = models.Node.insert()
 
         true_root = {
-            'id': str(1),
-            'parent': str(None),
-            'root': str(1),
-            'height': str(0),
+            "id": str(1),
+            "parent": str(None),
+            "root": str(1),
+            "height": str(0),
         }
 
         assert true_root == root.to_dict()
