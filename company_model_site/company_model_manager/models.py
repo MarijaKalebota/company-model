@@ -17,14 +17,13 @@ class Node(models.Model):
     def insert(cls, parent_id=None):
         """
         Create a node in the tree. If the parent is not passed (None), then
-        the nodei s considered the root node. There can only be one root node,
-        and an exception will be raised (ValuError) if this is not true.
+        the node is considered the root node. There can only be one root node,
+        and an exception will be raised (ValueError) if this is not true.
         """
         if parent_id == None:
             created, node = cls.insert_root()
         else:
             created, node = cls.insert_node(parent_id)
-
         return created, node
 
     @classmethod
@@ -57,8 +56,9 @@ class Node(models.Model):
         flag indicated has the node been created, and the node is a refernece
         to the node if it has been created, otherwise it is None.
         """
-        parent = cls.objects.get(id=parent_id)
-        if parent is None:
+        try:
+            parent = cls.objects.get(id=parent_id)
+        except cls.DoesNotExist as e:
             return False, None
 
         node = cls(root=cls.get_root(), parent=parent, height=parent.height + 1,)
@@ -71,11 +71,11 @@ class Node(models.Model):
         """
         Returns the root node if it exists, otherwise returns None.
         """
-        if not cls.objects.exists():
+        try:
+            root = cls.objects.get(parent=None)
+        except cls.DoesNotExist as e:
             return None
-
-        # TODO Check if the root actually exists
-        return cls.objects.get(parent=None)
+        return root
 
     @classmethod
     def is_node_among_descendants(cls, top_node, node_to_find):
@@ -104,8 +104,7 @@ class Node(models.Model):
         """
         new_parent = Node.objects.get(id=parent_id)
         if self.is_node_among_descendants(self, new_parent):
-            return False
-
+            raise ValueError("New parent can not be among given node's descendants.")
         self.parent = new_parent
         self.save()
         return True
@@ -114,9 +113,7 @@ class Node(models.Model):
         """
         Run BFS to get all descendant nodes.
         """
-        # TODO request?
         # TODO arguments into docstring
-        # TODO invalid node id
         descendants = []
         nodes_to_check = [self]
 

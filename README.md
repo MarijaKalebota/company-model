@@ -35,9 +35,15 @@ docker build --tag company-model-service:1.0 .
 docker run -d company-model-service:1.0
 ```
 
+## Run tests
+
+```bash
+python manage.py test company_model_manager/
+```
+
 ## Contribute
 
-After you add or change code, run both `black` and `isort` to unify the code style;
+After you add or change code, run the test suite, and run both `black` and `isort` to unify the code style:
 
 ```bash
 black company_model_site/company_model_manager/
