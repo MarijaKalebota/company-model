@@ -1,22 +1,19 @@
-<h1>{{ question.question_text }}</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>My test page</title>
+</head>
+<body>
+    <h1>Modify node's parent</h1>
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
-<form action="{% url 'company_model_manager:vote' node.id %}" method="post">
-{% csrf_token %}
-{% for choice in question.choice_set.all %}
-    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-{% endfor %}
-<input type="submit" value="Vote">
-</form>
-
-<h1>Modify node's parent</h1>
-
-<form action="/nodes/" method="POST">
-    <label for="node_id">Node ID:</label><br>
-    <input type="text" id="node_id" name="node_id"><br>
-    <label for="new_parent_id">New parent ID:</label><br>
-    <input type="text" id="new_parent_id" name="new_parent_id"><br><br>
-    <input type="submit" value="Set new parent!">
-  </form>
+    <form action="{% url 'company_model_manager:node' node_id %}" method="POST">
+        {% csrf_token %}
+        <label for="node_id">Node ID:</label><br>
+        <input type="text" id="node_id" name="node_id"><br>
+        <label for="new_parent_id">New parent ID:</label><br>
+        <input type="text" id="new_parent_id" name="new_parent_id"><br><br>
+        <input type="submit" value="Set new parent!">
+    </form>
+</body>
+</html>

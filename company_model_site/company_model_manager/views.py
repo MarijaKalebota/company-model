@@ -21,9 +21,7 @@ def insert_root(request):
         )
         try:
             with transaction.atomic():
-                print("Entered transaction")
                 root.save()
-                print("Saved")
                 root.root = root
                 root.save()
                 return HttpResponse("Root created.", status=201)
@@ -71,8 +69,8 @@ def get_node(request, node_id):
 def node(request, node_id):
     if request.method == "GET":
         get_node(request, node_id)
-    elif request.method == "PUT":
-        new_parent_id = request.PUT.get("new_parent_id")
+    elif request.method == "POST":
+        new_parent_id = request.POST.get("new_parent_id")
         set_parent(request, node_id, new_parent_id)
     # TODO implement DELETE
     else:
