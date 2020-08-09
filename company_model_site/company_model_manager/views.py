@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.template import loader
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from . import models
 
@@ -13,7 +14,7 @@ from . import models
 def index(request):
     return HttpResponse("Hello, world. You're at the index.")
 
-
+@csrf_exempt
 def nodes_api(request):
     if request.method == "GET":
         nodes = models.Node.objects.all()
@@ -28,7 +29,7 @@ def nodes_api(request):
             # TODO catch
             return HttpResponse("Unsuccessful creation", status=400)
 
-
+@csrf_exempt
 def node_api(request, node_id):
     response = _node(request, node_id, False)
     if response.status_code >= 400:
@@ -36,11 +37,10 @@ def node_api(request, node_id):
     else:
         return HttpResponse(response, content_type="application/json")
 
-
+@csrf_exempt
 def node_gui(request, node_id):
     response = _node(request, node_id, True)
     return HttpResponse(response)
-
 
 def _node(request, node_id, gui):
     try:
