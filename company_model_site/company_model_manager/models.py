@@ -3,8 +3,6 @@ import json
 
 from django.db import IntegrityError, models, transaction
 
-# Create your models here.
-
 
 class Node(models.Model):
     root = models.ForeignKey(
