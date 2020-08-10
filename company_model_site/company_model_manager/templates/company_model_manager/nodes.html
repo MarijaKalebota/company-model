@@ -2,18 +2,18 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Node</title>
+    <title>Nodes</title>
   </head>
   <body>
-    {% if node %}
-        <h2>Node {{node.id}}</h2>
+    {% if nodes %}
+        <h4>Company Departments (Nodes):</h4>
         <ul>
-            <li>Root: <a href="/company_model_manager/nodes/{{ node.root.id }}/">{{ node.root.id }}</a></li>
-            <li>Parent: <a href="/company_model_manager/nodes/{{ node.parent.id }}/">{{ node.parent.id }}</a></li>
-            <li><a href="/company_model_manager/nodes/{{ node.id }}/descendants/">{{ "Descendants" }}</a></li>
+        {% for node in nodes %}
+            <li>Node <a href="/company_model_manager/nodes/{{ node.id }}/">{{ node.id }}</a></li>
+        {% endfor %}
         </ul>
     {% else %}
-        <p>That node does not exist.</p>
+        <p>This company currently has no departments (nodes).</p>
     {% endif %}
   </body>
 </html>

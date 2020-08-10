@@ -29,10 +29,11 @@ def nodes_api(request):
             )
         else:
             return HttpResponse("Unsuccessful creation", status=400)
+
 def nodes_gui(request):
     nodes = models.Node.objects.all()
     context = {"nodes": nodes}
-    template = loader.get_template("company_model_manager/all_nodes.html")
+    template = loader.get_template("company_model_manager/nodes.html")
     return HttpResponse(template.render(context, request))
 
 @csrf_exempt
@@ -58,7 +59,7 @@ def _node(request, node_id, gui):
 
     if request.method == "GET":
         if gui:
-            template = loader.get_template("company_model_manager/nodes.html")
+            template = loader.get_template("company_model_manager/node.html")
             context = {"node": node}
             return HttpResponse(template.render(context, request))
         else:
