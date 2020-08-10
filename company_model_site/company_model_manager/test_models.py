@@ -2,15 +2,6 @@ from company_model_manager import models
 from django.test import Client, TestCase
 
 
-def populate_db_with_nodes():
-    _, root = models.Node.insert()
-    _, node1a = models.Node.insert(root.id)
-    _, node1b = models.Node.insert(root.id)
-    _, node2a = models.Node.insert(node1b.id)
-
-    return root, node1a, node1b, node2a
-
-
 def insert_root():
     root = models.Node(root=None, parent=None, height=0,)
     root.save()
@@ -41,31 +32,31 @@ def populate_db_with_test_nodes():
 
 class NodeModelTests(TestCase):
     def test_get_descendant_of_root(self):
-        root, node1a, node1b, node2a = populate_db_with_nodes()
+        root, test_node_2, test_node_3, test_node_4 = populate_db_with_test_nodes()
 
         descendants = root.get_descendants()
         descendant_node_ids = [descendant.id for descendant in descendants]
 
         assert len(descendants) == 3
 
-        assert node1a.id in descendant_node_ids
-        assert node1b.id in descendant_node_ids
-        assert node2a.id in descendant_node_ids
+        assert test_node_2.id in descendant_node_ids
+        assert test_node_3.id in descendant_node_ids
+        assert test_node_4.id in descendant_node_ids
 
     def test_root_height(self):
-        root, node1a, node1b, node2a = populate_db_with_nodes()
+        root, test_node_2, test_node_3, test_node_4 = populate_db_with_test_nodes()
 
         assert root.height == 0
 
     def test_level_1_height(self):
-        root, node1a, node1b, node2a = populate_db_with_nodes()
+        root, test_node_2, test_node_3, test_node_4 = populate_db_with_test_nodes()
 
-        assert node1a.height == 1
+        assert test_node_2.height == 1
 
     def test_get_descendant_nodes_one_level(self):
-        root, node1a, node1b, node2a = populate_db_with_nodes()
+        root, test_node_2, test_node_3, test_node_4 = populate_db_with_test_nodes()
 
-        assert len(node2a.get_descendants()) == 0
+        assert len(test_node_4.get_descendants()) == 0
 
     def test_insert_root_node(self):
         assert len(models.Node.objects.all()) == 0
@@ -77,7 +68,7 @@ class NodeModelTests(TestCase):
         assert root.parent is None
         assert root.height == 0
 
-    def test_to_node_dict(self):
+    def test_node_to_dict(self):
         _, root = models.Node.insert()
 
         true_root = {
