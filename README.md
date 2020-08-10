@@ -53,10 +53,15 @@ isort -rc company_model_site/company_model_manager/
 # API documentation and examples
 
 - /api/nodes/
-- - GET - returns all existing nodes
-- - POST 
+```
+curl -X GET http://127.0.0.1:8000/company_model_manager/nodes/
+```
+returns all existing nodes
+```
+curl -X POST http://127.0.0.1:8000/company_model_manager/nodes/ -d "{"parent_id":1}
+```
 
-curl -X GET http://127.0.0.1:8000/company_model_manager/nodes/5/descendants/
+curl -X GET http://127.0.0.1:8000/company_model_manager/nodes/
 
 curl -X POST http://127.0.0.1:8000/company_model_manager/nodes/5/descendants/ -d "{"parent_id":1}
 
