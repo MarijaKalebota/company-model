@@ -35,7 +35,6 @@ def populate_db_with_test_nodes():
 
     test_node_4 = models.Node(root=root, parent=test_node_2, height=2,)
     test_node_4.save()
-    # print(f"Set parent of node {test_node_4.id} to {test_node_4.parent.id}")
 
     return root, test_node_2, test_node_3, test_node_4
 

@@ -12,8 +12,9 @@ from . import models
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the index.")
-
+    context = {}
+    template = loader.get_template("company_model_manager/index.html")
+    return HttpResponse(template.render(context, request))
 
 @csrf_exempt
 def nodes_api(request):
@@ -21,16 +22,18 @@ def nodes_api(request):
         nodes = models.Node.objects.all()
         return JsonResponse({"nodes": [node.to_dict() for node in nodes]},)
     if request.method == "POST":
-        print(request.POST)
         created, node = models.Node.insert(request.POST.get("parent_id"))
         if created:
             return HttpResponseRedirect(
                 reverse("company_model_manager:node_api", args=(node.id,))
             )
         else:
-            # TODO catch
             return HttpResponse("Unsuccessful creation", status=400)
-
+def nodes_gui(request):
+    nodes = models.Node.objects.all()
+    context = {"nodes": nodes}
+    template = loader.get_template("company_model_manager/all_nodes.html")
+    return HttpResponse(template.render(context, request))
 
 @csrf_exempt
 def node_api(request, node_id):

@@ -112,12 +112,8 @@ class Node(models.Model):
         self.height = new_height
 
         height_difference = new_height - old_height
-        print("METHOD PRINTING")
-        print(height_difference)
 
         descendants = self.get_descendants()
-        print(descendants)
-        # breakpoint()
         for descendant in descendants:
             descendant.height = descendant.height + height_difference
 
@@ -134,7 +130,6 @@ class Node(models.Model):
         """
         Run BFS to get all descendant nodes.
         """
-        # TODO arguments into docstring
         descendants = []
         nodes_to_check = [self]
 
