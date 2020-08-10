@@ -16,6 +16,7 @@ def index(request):
     template = loader.get_template("company_model_manager/index.html")
     return HttpResponse(template.render(context, request))
 
+
 @csrf_exempt
 def nodes_api(request):
     if request.method == "GET":
@@ -30,11 +31,13 @@ def nodes_api(request):
         else:
             return HttpResponse("Unsuccessful creation", status=400)
 
+
 def nodes_gui(request):
     nodes = models.Node.objects.all()
     context = {"nodes": nodes}
     template = loader.get_template("company_model_manager/nodes.html")
     return HttpResponse(template.render(context, request))
+
 
 @csrf_exempt
 def node_api(request, node_id):
