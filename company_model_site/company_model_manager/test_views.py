@@ -68,6 +68,7 @@ class ViewsTests(TestCase):
             f"/company_model_manager/api/v1/nodes/", data={"parent_id": 1}
         )
         assert response.status_code == 302
+        assert len(models.Node.objects.all()) == 2
 
     def test_multiple_nodes_api_post_incorrect(self):
         response = self.client.post(f"/company_model_manager/api/v1/nodes/")

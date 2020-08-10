@@ -105,8 +105,29 @@ class Node(models.Model):
         new_parent = Node.objects.get(id=parent_id)
         if self.is_node_among_descendants(self, new_parent):
             raise ValueError("New parent can not be among given node's descendants.")
+        old_height = self.height
+        new_height = new_parent.height + 1
+
         self.parent = new_parent
-        self.save()
+        self.height = new_height
+
+        height_difference = new_height - old_height
+        print("METHOD PRINTING")
+        print(height_difference)
+
+        descendants = self.get_descendants()
+        print(descendants)
+        # breakpoint()
+        for descendant in descendants:
+            descendant.height = descendant.height + height_difference
+
+        try:
+            with transaction.atomic():
+                self.save()
+                for descendant in descendants:
+                    descendant.save()
+        except IntegrityError:
+            return False
         return True
 
     def get_descendants(self):

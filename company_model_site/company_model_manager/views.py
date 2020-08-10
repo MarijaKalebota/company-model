@@ -14,12 +14,14 @@ from . import models
 def index(request):
     return HttpResponse("Hello, world. You're at the index.")
 
+
 @csrf_exempt
 def nodes_api(request):
     if request.method == "GET":
         nodes = models.Node.objects.all()
         return JsonResponse({"nodes": [node.to_dict() for node in nodes]},)
     if request.method == "POST":
+        print(request.POST)
         created, node = models.Node.insert(request.POST.get("parent_id"))
         if created:
             return HttpResponseRedirect(
@@ -29,6 +31,7 @@ def nodes_api(request):
             # TODO catch
             return HttpResponse("Unsuccessful creation", status=400)
 
+
 @csrf_exempt
 def node_api(request, node_id):
     response = _node(request, node_id, False)
@@ -37,10 +40,12 @@ def node_api(request, node_id):
     else:
         return HttpResponse(response, content_type="application/json")
 
+
 @csrf_exempt
 def node_gui(request, node_id):
     response = _node(request, node_id, True)
     return HttpResponse(response)
+
 
 def _node(request, node_id, gui):
     try:
