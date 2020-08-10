@@ -52,16 +52,34 @@ isort -rc company_model_site/company_model_manager/
 
 # API documentation and examples
 
-- /api/nodes/
-```
-curl -X GET http://127.0.0.1:8000/company_model_manager/nodes/
-```
-returns all existing nodes
-```
-curl -X POST http://127.0.0.1:8000/company_model_manager/nodes/ -d "{"parent_id":1}
-```
+- **/api/v1/nodes/**
 
-curl -X GET http://127.0.0.1:8000/company_model_manager/nodes/
+    ```python
+    requests.get("http://127.0.0.1:8000/company_model_manager/api/v1/nodes/")
+    ```
+    - returns all existing nodes
 
-curl -X POST http://127.0.0.1:8000/company_model_manager/nodes/5/descendants/ -d "{"parent_id":1}
+    ```python
+    requests.post("http://127.0.0.1:8000/company_model_manager/api/v1/nodes/", data={"parent_id":1})
+    ```
+    - creates a node with parent_id 1 (if such a parent exists)
 
+- **/api/v1/nodes/<node_id>**
+
+    ```python
+    requests.get("http://127.0.0.1:8000/company_model_manager/api/v1/nodes/1/")
+    ```
+    - gets node with ID 1
+
+    ```python
+    requests.post("http://127.0.0.1:8000/company_model_manager/api/v1/nodes/6/", data={"new_parent_id":5})
+    ```
+    - modifies the parent of node with ID=6 - sets it to the node with ID=5 if that node is not among its descendants
+
+* **/api/v1/nodes/<node_id>/descendants**
+
+    ```python
+    requests.get("http://127.0.0.1:8000/company_model_manager/api/v1/nodes/1/descendants/")
+    ```
+
+    - gets all descendants of node with ID=1
