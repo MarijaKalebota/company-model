@@ -12,10 +12,20 @@ Run (in your Python 3.8 environment)
 python -m pip install -r requirements.txt
 ```
 
-Start the service
+Start the service (development)
 
 ```bash
 python manage.py runserver
+```
+
+Start the service (native with gunicorn)
+```bash
+gunicorn company_model_site.wsgi:application --workers 10
+```
+
+Start the service (Docker)
+```bash
+docker-compose build && docker-compose up
 ```
 
 ## Docker
@@ -25,7 +35,7 @@ Install [docker](https://www.docker.com/) and [docker-compose](https://docs.dock
 Run with `docker-compose`
 
 ```bash
-docker-compose up
+docker-compose build && docker-compose up
 ```
 
 Or with raw docker
