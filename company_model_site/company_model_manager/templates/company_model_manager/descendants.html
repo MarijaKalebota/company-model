@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Descendants</title>
+  </head>
+  <body>
+    {% if descendants %}
+        <ul>
+        {% for descendant in descendants %}
+            <li>Node <a href="/company_model_manager/nodes/{{ descendant.id }}/">{{ descendant.id }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Node {{node_id}} has no descendants.</p>
+    {% endif %}
+  </body>
+</html>

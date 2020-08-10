@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Nodes</title>
+  </head>
+  <body>
+    {% if nodes %}
+        <h4>Company Departments (Nodes):</h4>
+        <ul>
+        {% for node in nodes %}
+            <li>Node <a href="/company_model_manager/nodes/{{ node.id }}/">{{ node.id }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>This company currently has no departments (nodes).</p>
+    {% endif %}
+  </body>
+</html>
