@@ -46,8 +46,8 @@ class ViewsTests(TestCase):
 
     def test_multiple_descendants_api_get(self):
         _, root = models.Node.insert()
-        _, node1a = models.Node.insert(root.id)
-        _, node2a = models.Node.insert(node1a.id)
+        _, test_node_2 = models.Node.insert(root.id)
+        _, test_node_3 = models.Node.insert(test_node_2.id)
 
         response = self.client.get(
             f"/company_model_manager/api/v1/nodes/{root.id}/descendants/"
